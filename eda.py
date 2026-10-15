@@ -8,9 +8,14 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 
 
-DATASET_PATH = "WA_Fn-UseC_-HR-Employee-Attrition.csv"
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
-CHART_FOLDER = "static/charts"
+DATASET_PATH = os.path.join(
+    BASE_DIR,
+    "WA_Fn-UseC_-HR-Employee-Attrition.csv"
+)
+
+CHART_FOLDER = os.path.join(BASE_DIR, "static", "charts")
 
 
 # ==========================================================

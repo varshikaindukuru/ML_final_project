@@ -1,3 +1,4 @@
+
 from flask import Flask, render_template, request
 
 from load_data import get_dataset_info
@@ -21,13 +22,21 @@ from tree_based import (
     run_tree_algorithm
 )
 
+from kmeans import (
+    run_kmeans
+)
+
+from hierarchical_clustering import (
+    run_hierarchical_clustering
+)
+
+from dbscan import (
+    run_dbscan_clustering
+)
+
 
 app = Flask(__name__)
 
-
-# =====================================================
-# HOME
-# =====================================================
 
 @app.route("/")
 def home():
@@ -36,11 +45,9 @@ def home():
     data = None
 
     try:
-
         data = get_dataset_info()
 
     except Exception as e:
-
         error = f"Error: {e}"
 
     return render_template(
@@ -50,10 +57,6 @@ def home():
     )
 
 
-# =====================================================
-# EDA
-# =====================================================
-
 @app.route("/eda")
 def eda():
 
@@ -61,13 +64,10 @@ def eda():
     summary = None
 
     try:
-
         generate_all_charts()
-
         summary = get_eda_summary()
 
     except Exception as e:
-
         error = f"Error: {e}"
 
     return render_template(
@@ -77,10 +77,6 @@ def eda():
     )
 
 
-# =====================================================
-# PREPROCESSING
-# =====================================================
-
 @app.route("/preprocessing")
 def preprocessing():
 
@@ -88,11 +84,9 @@ def preprocessing():
     results = None
 
     try:
-
         results = run_preprocessing()
 
     except Exception as e:
-
         error = f"Error: {e}"
 
     return render_template(
@@ -101,10 +95,6 @@ def preprocessing():
         error=error
     )
 
-
-# =====================================================
-# LINEAR REGRESSION PAGE
-# =====================================================
 
 @app.route("/linear-regression")
 def linear_regression_page():
@@ -117,27 +107,16 @@ def linear_regression_page():
     )
 
 
-# =====================================================
-# LINEAR REGRESSION
-# WITHOUT REGULARIZATION
-# =====================================================
-
-@app.route(
-    "/linear-regression/without-regularization"
-)
+@app.route("/linear-regression/without-regularization")
 def linear_regression_without():
 
     error = None
     results = None
 
     try:
-
-        results = run_linear_regression(
-            "none"
-        )
+        results = run_linear_regression("none")
 
     except Exception as e:
-
         error = f"Error: {e}"
 
     return render_template(
@@ -148,27 +127,16 @@ def linear_regression_without():
     )
 
 
-# =====================================================
-# LINEAR REGRESSION
-# RIDGE REGULARIZATION
-# =====================================================
-
-@app.route(
-    "/linear-regression/with-regularization"
-)
+@app.route("/linear-regression/with-regularization")
 def linear_regression_with():
 
     error = None
     results = None
 
     try:
-
-        results = run_linear_regression(
-            "ridge"
-        )
+        results = run_linear_regression("ridge")
 
     except Exception as e:
-
         error = f"Error: {e}"
 
     return render_template(
@@ -179,27 +147,16 @@ def linear_regression_with():
     )
 
 
-# =====================================================
-# LINEAR REGRESSION
-# LASSO REGULARIZATION
-# =====================================================
-
-@app.route(
-    "/linear-regression/lasso"
-)
+@app.route("/linear-regression/lasso")
 def linear_regression_lasso():
 
     error = None
     results = None
 
     try:
-
-        results = run_linear_regression(
-            "lasso"
-        )
+        results = run_linear_regression("lasso")
 
     except Exception as e:
-
         error = f"Error: {e}"
 
     return render_template(
@@ -209,10 +166,6 @@ def linear_regression_lasso():
         error=error
     )
 
-
-# =====================================================
-# LOGISTIC REGRESSION PAGE
-# =====================================================
 
 @app.route("/logistic-regression")
 def logistic_regression_page():
@@ -225,27 +178,16 @@ def logistic_regression_page():
     )
 
 
-# =====================================================
-# LOGISTIC REGRESSION
-# WITHOUT REGULARIZATION
-# =====================================================
-
-@app.route(
-    "/logistic-regression/without-regularization"
-)
+@app.route("/logistic-regression/without-regularization")
 def logistic_regression_without():
 
     error = None
     results = None
 
     try:
-
-        results = run_logistic_regression(
-            "none"
-        )
+        results = run_logistic_regression("none")
 
     except Exception as e:
-
         error = f"Error: {e}"
 
     return render_template(
@@ -256,27 +198,16 @@ def logistic_regression_without():
     )
 
 
-# =====================================================
-# LOGISTIC REGRESSION
-# L2 REGULARIZATION
-# =====================================================
-
-@app.route(
-    "/logistic-regression/with-regularization"
-)
+@app.route("/logistic-regression/with-regularization")
 def logistic_regression_with():
 
     error = None
     results = None
 
     try:
-
-        results = run_logistic_regression(
-            "l2"
-        )
+        results = run_logistic_regression("l2")
 
     except Exception as e:
-
         error = f"Error: {e}"
 
     return render_template(
@@ -287,27 +218,16 @@ def logistic_regression_with():
     )
 
 
-# =====================================================
-# LOGISTIC REGRESSION
-# L1 / LASSO REGULARIZATION
-# =====================================================
-
-@app.route(
-    "/logistic-regression/lasso"
-)
+@app.route("/logistic-regression/lasso")
 def logistic_regression_lasso():
 
     error = None
     results = None
 
     try:
-
-        results = run_logistic_regression(
-            "lasso"
-        )
+        results = run_logistic_regression("lasso")
 
     except Exception as e:
-
         error = f"Error: {e}"
 
     return render_template(
@@ -317,10 +237,6 @@ def logistic_regression_lasso():
         error=error
     )
 
-
-# =====================================================
-# TREE BASED MODELS PAGE
-# =====================================================
 
 @app.route("/tree-based")
 def tree_based_page():
@@ -333,20 +249,11 @@ def tree_based_page():
     )
 
 
-# =====================================================
-# ID3
-# =====================================================
-
-@app.route(
-    "/tree-based-models/id3"
-)
+@app.route("/tree-based-models/id3")
 def id3_model():
 
     try:
-
-        results = run_tree_algorithm(
-            "id3"
-        )
+        results = run_tree_algorithm("id3")
 
         return render_template(
             "tree_based.html",
@@ -356,7 +263,6 @@ def id3_model():
         )
 
     except Exception as e:
-
         return render_template(
             "tree_based.html",
             results=None,
@@ -365,20 +271,11 @@ def id3_model():
         )
 
 
-# =====================================================
-# RANDOM FOREST
-# =====================================================
-
-@app.route(
-    "/tree-based-models/random-forest"
-)
+@app.route("/tree-based-models/random-forest")
 def random_forest_model():
 
     try:
-
-        results = run_tree_algorithm(
-            "random_forest"
-        )
+        results = run_tree_algorithm("random_forest")
 
         return render_template(
             "tree_based.html",
@@ -388,7 +285,6 @@ def random_forest_model():
         )
 
     except Exception as e:
-
         return render_template(
             "tree_based.html",
             results=None,
@@ -397,20 +293,11 @@ def random_forest_model():
         )
 
 
-# =====================================================
-# ADABOOST
-# =====================================================
-
-@app.route(
-    "/tree-based-models/adaboost"
-)
+@app.route("/tree-based-models/adaboost")
 def adaboost_model():
 
     try:
-
-        results = run_tree_algorithm(
-            "adaboost"
-        )
+        results = run_tree_algorithm("adaboost")
 
         return render_template(
             "tree_based.html",
@@ -420,7 +307,6 @@ def adaboost_model():
         )
 
     except Exception as e:
-
         return render_template(
             "tree_based.html",
             results=None,
@@ -429,20 +315,11 @@ def adaboost_model():
         )
 
 
-# =====================================================
-# GRADIENT BOOSTING
-# =====================================================
-
-@app.route(
-    "/tree-based-models/gradient-boosting"
-)
+@app.route("/tree-based-models/gradient-boosting")
 def gradient_boosting_model():
 
     try:
-
-        results = run_tree_algorithm(
-            "gradient_boosting"
-        )
+        results = run_tree_algorithm("gradient_boosting")
 
         return render_template(
             "tree_based.html",
@@ -452,7 +329,6 @@ def gradient_boosting_model():
         )
 
     except Exception as e:
-
         return render_template(
             "tree_based.html",
             results=None,
@@ -461,20 +337,11 @@ def gradient_boosting_model():
         )
 
 
-# =====================================================
-# XGBOOST
-# =====================================================
-
-@app.route(
-    "/tree-based-models/xgboost"
-)
+@app.route("/tree-based-models/xgboost")
 def xgboost_model():
 
     try:
-
-        results = run_tree_algorithm(
-            "xgboost"
-        )
+        results = run_tree_algorithm("xgboost")
 
         return render_template(
             "tree_based.html",
@@ -484,7 +351,6 @@ def xgboost_model():
         )
 
     except Exception as e:
-
         return render_template(
             "tree_based.html",
             results=None,
@@ -493,20 +359,11 @@ def xgboost_model():
         )
 
 
-# =====================================================
-# LIGHTGBM
-# =====================================================
-
-@app.route(
-    "/tree-based-models/lightgbm"
-)
+@app.route("/tree-based-models/lightgbm")
 def lightgbm_model():
 
     try:
-
-        results = run_tree_algorithm(
-            "lightgbm"
-        )
+        results = run_tree_algorithm("lightgbm")
 
         return render_template(
             "tree_based.html",
@@ -516,7 +373,6 @@ def lightgbm_model():
         )
 
     except Exception as e:
-
         return render_template(
             "tree_based.html",
             results=None,
@@ -525,13 +381,7 @@ def lightgbm_model():
         )
 
 
-# =====================================================
-# TREE BASED MODELS MAIN PAGE
-# =====================================================
-
-@app.route(
-    "/tree-based-models"
-)
+@app.route("/tree-based-models")
 def tree_based_models_page():
 
     return render_template(
@@ -542,13 +392,110 @@ def tree_based_models_page():
     )
 
 
-# =====================================================
-# START APPLICATION
-# =====================================================
+# =========================================================
+# K-MEANS CLUSTERING
+# =========================================================
+
+@app.route("/kmeans", methods=["GET", "POST"])
+def kmeans_view():
+
+    method = request.values.get("method", "silhouette")
+    manual_k = request.values.get("manual_k")
+
+    try:
+        result = run_kmeans(
+            method=method,
+            manual_k=manual_k
+        )
+
+        return render_template(
+            "kmeans.html",
+            result=result,
+            method=method,
+            error=None
+        )
+
+    except Exception as e:
+        return render_template(
+            "kmeans.html",
+            result=None,
+            method=method,
+            error=str(e)
+        )
+
+
+# =========================================================
+# HIERARCHICAL CLUSTERING
+# =========================================================
+
+@app.route("/hierarchical")
+def hierarchical_view():
+
+    linkage_method = request.args.get("linkage", "ward")
+
+    try:
+        n_clusters = int(request.args.get("n_clusters", 3))
+
+        result = run_hierarchical_clustering(
+            n_clusters=n_clusters,
+            linkage_method=linkage_method
+        )
+
+        return render_template(
+            "hierarchical.html",
+            result=result,
+            linkage_method=linkage_method,
+            n_clusters=n_clusters,
+            error=None
+        )
+
+    except Exception as e:
+        return render_template(
+            "hierarchical.html",
+            result=None,
+            linkage_method=linkage_method,
+            n_clusters=request.args.get("n_clusters", 3),
+            error=str(e)
+        )
+
+
+# =========================================================
+# DBSCAN CLUSTERING
+# =========================================================
+
+@app.route("/dbscan")
+def dbscan_view():
+
+    try:
+        eps = float(request.args.get("eps", 6.0))
+        min_samples = int(request.args.get("min_samples", 10))
+
+        result = run_dbscan_clustering(
+            eps=eps,
+            min_samples=min_samples
+        )
+
+        return render_template(
+            "dbscan.html",
+            result=result,
+            eps=eps,
+            min_samples=min_samples,
+            error=None
+        )
+
+    except Exception as e:
+        return render_template(
+            "dbscan.html",
+            result=None,
+            eps=request.args.get("eps", 6.0),
+            min_samples=request.args.get("min_samples", 10),
+            error=str(e)
+        )
+
 
 if __name__ == "__main__":
 
     app.run(
         debug=True,
-        port=5000
+        port=5001
     )

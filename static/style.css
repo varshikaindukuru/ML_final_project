@@ -1475,3 +1475,501 @@ select:focus {
         padding: 35px 20px;
     }
 }
+
+
+/* =====================================================
+   SKILLMATCH - CLUSTERING PAGES
+   Added styles: K-Means, Hierarchical, and DBSCAN
+   Existing styles remain unchanged.
+===================================================== */
+
+/* Clustering page layout */
+.clustering-page,
+.kmeans-page,
+.hierarchical-page,
+.dbscan-page {
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+    overflow-x: hidden;
+}
+
+/* Clustering page header */
+.clustering-header {
+    margin-bottom: 30px;
+}
+
+.clustering-header h1,
+.clustering-header h2 {
+    color: #243f70;
+    margin-bottom: 10px;
+}
+
+.clustering-header p {
+    color: #555;
+    font-size: 16px;
+    line-height: 1.7;
+}
+
+/* Clustering controls */
+.clustering-controls,
+.cluster-controls {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 18px;
+    width: 100%;
+    margin: 25px 0;
+    padding: 24px;
+    background: #f7f9fc;
+    border: 1px solid #d5dce5;
+    border-radius: 10px;
+}
+
+.clustering-controls label,
+.cluster-controls label {
+    color: #243f70;
+    font-size: 15px;
+    font-weight: bold;
+}
+
+.clustering-controls select,
+.clustering-controls input,
+.cluster-controls select,
+.cluster-controls input {
+    max-width: 100%;
+    padding: 11px 14px;
+    border: 1px solid #c5ccd6;
+    border-radius: 6px;
+    background: #ffffff;
+    font-size: 15px;
+}
+
+.clustering-controls button,
+.cluster-controls button {
+    padding: 12px 22px;
+    background: #243f70;
+    color: #ffffff;
+    border: none;
+    border-radius: 6px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: 0.25s ease;
+}
+
+.clustering-controls button:hover,
+.cluster-controls button:hover {
+    background: #4169a1;
+    transform: translateY(-1px);
+}
+
+/* Clustering metric cards */
+.clustering-metrics,
+.cluster-metrics,
+.clustering-stats {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 20px;
+    width: 100%;
+    margin: 25px 0 35px;
+}
+
+.clustering-metrics .metric-box,
+.cluster-metrics .metric-box,
+.clustering-stats .stat-box {
+    min-width: 0;
+    padding: 22px;
+    background: #f7f9fc;
+    border: 1px solid #d8dee8;
+    border-radius: 10px;
+    text-align: center;
+    overflow-wrap: anywhere;
+    transition: 0.25s ease;
+}
+
+.clustering-metrics .metric-box:hover,
+.cluster-metrics .metric-box:hover,
+.clustering-stats .stat-box:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+}
+
+.clustering-metrics span,
+.cluster-metrics span,
+.clustering-stats span {
+    display: block;
+    margin-bottom: 10px;
+    color: #555;
+    font-size: 14px;
+}
+
+.clustering-metrics strong,
+.cluster-metrics strong,
+.clustering-stats strong {
+    color: #243f70;
+    font-size: 24px;
+}
+
+/* Clustering chart panels */
+.clustering-chart,
+.cluster-chart,
+.dendrogram-container,
+.pca-chart-container {
+    width: 100%;
+    min-width: 0;
+    margin: 25px 0;
+    padding: 20px;
+    background: #ffffff;
+    border: 1px solid #d8dee8;
+    border-radius: 10px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.07);
+    overflow: hidden;
+}
+
+.clustering-chart h2,
+.clustering-chart h3,
+.cluster-chart h2,
+.cluster-chart h3,
+.dendrogram-container h3,
+.pca-chart-container h3 {
+    margin-bottom: 15px;
+    color: #243f70;
+}
+
+.clustering-chart img,
+.cluster-chart img,
+.dendrogram-container img,
+.pca-chart-container img {
+    display: block;
+    width: 100%;
+    max-width: 100%;
+    height: auto;
+    margin: 0 auto;
+    border-radius: 6px;
+}
+
+/* Two-column clustering charts */
+.clustering-chart-grid,
+.cluster-chart-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 22px;
+    width: 100%;
+    margin: 25px 0;
+}
+
+/* Cluster summary table */
+.cluster-summary,
+.clustering-table,
+.cluster-table-container {
+    width: 100%;
+    max-width: 100%;
+    margin: 25px 0;
+    padding: 22px;
+    background: #ffffff;
+    border: 1px solid #d8dee8;
+    border-radius: 10px;
+    overflow-x: auto;
+}
+
+.cluster-summary h2,
+.cluster-summary h3,
+.clustering-table h2,
+.clustering-table h3,
+.cluster-table-container h2,
+.cluster-table-container h3 {
+    margin-bottom: 15px;
+    color: #243f70;
+}
+
+.cluster-summary table,
+.clustering-table table,
+.cluster-table-container table {
+    width: 100%;
+    min-width: 600px;
+    border-collapse: collapse;
+}
+
+.cluster-summary th,
+.clustering-table th,
+.cluster-table-container th {
+    padding: 12px;
+    background: #dce6f2;
+    color: #243f70;
+    border: 1px solid #cdd6e2;
+    text-align: left;
+    white-space: nowrap;
+}
+
+.cluster-summary td,
+.clustering-table td,
+.cluster-table-container td {
+    padding: 11px 12px;
+    border: 1px solid #cdd6e2;
+    overflow-wrap: anywhere;
+}
+
+.cluster-summary tr:hover td,
+.clustering-table tr:hover td,
+.cluster-table-container tr:hover td {
+    background: #f1f5fa;
+}
+
+/* Explanatory information panels */
+.clustering-info,
+.cluster-info,
+.clustering-observation {
+    margin: 20px 0;
+    padding: 20px;
+    background: #f7f9fc;
+    border-left: 5px solid #4169a1;
+    border-radius: 6px;
+    line-height: 1.7;
+    overflow-wrap: break-word;
+}
+
+.clustering-info h3,
+.cluster-info h3,
+.clustering-observation h3 {
+    margin-bottom: 10px;
+    color: #243f70;
+}
+
+/* Error messages on clustering pages */
+.clustering-page .error,
+.kmeans-page .error,
+.hierarchical-page .error,
+.dbscan-page .error {
+    margin: 20px 0;
+    padding: 15px;
+    color: #b00020;
+    background: #fdecea;
+    border: 1px solid #f5c2c7;
+    border-radius: 6px;
+    overflow-wrap: anywhere;
+}
+
+/* Clustering page responsive layout */
+@media (max-width: 900px) {
+    .clustering-metrics,
+    .cluster-metrics,
+    .clustering-stats {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .clustering-chart-grid,
+    .cluster-chart-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 600px) {
+    .clustering-controls,
+    .cluster-controls {
+        align-items: stretch;
+        flex-direction: column;
+        padding: 18px;
+    }
+
+    .clustering-controls select,
+    .clustering-controls input,
+    .cluster-controls select,
+    .cluster-controls input {
+        width: 100%;
+    }
+
+    .clustering-controls button,
+    .cluster-controls button {
+        width: 100%;
+    }
+
+    .clustering-metrics,
+    .cluster-metrics,
+    .clustering-stats {
+        grid-template-columns: 1fr;
+    }
+
+    .clustering-chart,
+    .cluster-chart,
+    .dendrogram-container,
+    .pca-chart-container,
+    .cluster-summary,
+    .clustering-table,
+    .cluster-table-container {
+        padding: 14px;
+    }
+}
+
+
+/* =====================================================
+   FIX: SKILLMATCH CLUSTERING PAGE LAYOUT
+   ===================================================== */
+
+/* Keep the clustering page content vertical */
+.content > .container:has(.metrics-grid),
+.content > .container:has(.welcome-card) {
+    display: block;
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+    margin: 0;
+}
+
+/* Page heading and description */
+.content > .container > h1 {
+    display: block;
+    width: 100%;
+    margin: 0 0 12px;
+    font-size: 32px;
+    line-height: 1.3;
+    overflow-wrap: break-word;
+}
+
+.content > .container > p {
+    display: block;
+    width: 100%;
+    margin: 0 0 25px;
+    color: #555;
+    font-size: 16px;
+    line-height: 1.6;
+}
+
+/* Clustering settings panel */
+.content > .container > .welcome-card {
+    display: block;
+    width: 100%;
+    max-width: 100%;
+    margin-bottom: 25px;
+    padding: 25px;
+    background: #f7f9fc;
+    border: 1px solid #d5dce5;
+    border-radius: 10px;
+}
+
+.content > .container > .welcome-card h2 {
+    font-size: 24px;
+    line-height: 1.4;
+    margin-bottom: 15px;
+}
+
+/* Metrics in a horizontal grid */
+.content .metrics-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 20px;
+    width: 100%;
+    margin: 25px 0;
+}
+
+.content .metrics-grid .metric-box {
+    min-width: 0;
+    padding: 22px;
+    text-align: center;
+    overflow-wrap: anywhere;
+}
+
+.content .metrics-grid .metric-box h4 {
+    margin-bottom: 12px;
+    font-size: 16px;
+    line-height: 1.5;
+}
+
+.content .metrics-grid .metric-box p {
+    font-size: 25px;
+    font-weight: bold;
+    color: #243f70;
+}
+
+/* Two charts side by side */
+.content .chart-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 25px;
+    width: 100%;
+    margin: 25px 0;
+}
+
+.content .chart-grid .chart-card {
+    width: 100%;
+    min-width: 0;
+    max-width: 100%;
+    padding: 20px;
+    overflow: hidden;
+}
+
+.content .chart-grid .chart-card h3 {
+    font-size: 18px;
+    line-height: 1.5;
+    overflow-wrap: break-word;
+}
+
+.content .chart-grid .chart-card img {
+    display: block;
+    width: 100%;
+    max-width: 100%;
+    height: auto;
+}
+
+/* Cluster summary table: scroll instead of squeezing */
+.content .table-container {
+    display: block;
+    width: 100%;
+    max-width: 100%;
+    margin: 25px 0;
+    padding: 20px;
+    overflow-x: auto;
+    border: 1px solid #d8dee8;
+    border-radius: 10px;
+    background: #fff;
+}
+
+.content .table-container h2 {
+    margin-bottom: 15px;
+    font-size: 24px;
+    line-height: 1.4;
+}
+
+.content .table-container table {
+    width: max-content;
+    min-width: 100%;
+    border-collapse: collapse;
+    table-layout: auto;
+}
+
+.content .table-container th,
+.content .table-container td {
+    padding: 12px 15px;
+    white-space: nowrap;
+    overflow-wrap: normal;
+    text-align: left;
+}
+
+/* Responsive layout */
+@media (max-width: 1000px) {
+    .content .metrics-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .content .chart-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 600px) {
+    .content > .container > h1 {
+        font-size: 26px;
+    }
+
+    .content > .container > .welcome-card {
+        padding: 16px;
+    }
+
+    .content .metrics-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .content .table-container {
+        padding: 12px;
+    }
+}
+

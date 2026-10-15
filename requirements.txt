@@ -2,3 +2,8 @@ pandas
 flask
 matplotlib
 seaborn
+numpy
+scipy
+scikit-learn
+xgboost
+lightgbm

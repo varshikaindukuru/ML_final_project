@@ -1,0 +1,174 @@
+
+{% extends "base.html" %}
+
+{% block title %}SkillMatch - Hierarchical Clustering{% endblock %}
+
+{% block content %}
+<div class="container">
+
+    <h1>Hierarchical Agglomerative Clustering</h1>
+
+    <p>
+        Grouping employees into clusters based on their work,
+        compensation, experience and satisfaction characteristics
+        using hierarchical clustering.
+    </p>
+
+    <div class="welcome-card" style="margin-bottom: 25px;">
+        <h2>Select Linkage Method and Cluster Count</h2>
+
+        <form method="get"
+              action="{{ url_for('hierarchical_view') }}"
+              style="display: flex; gap: 20px; align-items: flex-end;
+                     flex-wrap: wrap; margin-top: 15px;">
+
+            <div>
+                <label style="font-weight: bold; display: block;
+                              margin-bottom: 6px;">
+                    Linkage Method:
+                </label>
+
+                <select name="linkage"
+                        style="padding: 10px 14px;
+                               border: 2px solid #08b6c9;
+                               border-radius: 8px; font-size: 15px;
+                               width: 240px;">
+
+                    <option value="ward"
+                        {% if linkage_method == 'ward' %}selected{% endif %}>
+                        Ward (Variance Minimization)
+                    </option>
+
+                    <option value="complete"
+                        {% if linkage_method == 'complete' %}selected{% endif %}>
+                        Complete (Maximum Distance)
+                    </option>
+
+                    <option value="average"
+                        {% if linkage_method == 'average' %}selected{% endif %}>
+                        Average (Mean Distance)
+                    </option>
+                </select>
+            </div>
+
+            <div>
+                <label style="font-weight: bold; display: block;
+                              margin-bottom: 6px;">
+                    Number of Clusters (K):
+                </label>
+
+                <input type="number"
+                       min="2"
+                       max="8"
+                       name="n_clusters"
+                       value="{{ n_clusters }}"
+                       required
+                       style="padding: 10px 14px;
+                              border: 2px solid #08b6c9;
+                              border-radius: 8px; font-size: 15px;
+                              width: 160px;">
+            </div>
+
+            <div>
+                <button type="submit" class="btn-cyan">
+                    Compute Clusters
+                </button>
+            </div>
+
+        </form>
+    </div>
+
+    {% if error %}
+        <div class="error">
+            <p>{{ error }}</p>
+        </div>
+
+    {% elif result %}
+
+        <div class="metrics-grid">
+
+            <div class="metric-box">
+                <h4>Clusters Formed</h4>
+                <p>{{ result.n_clusters }}</p>
+            </div>
+
+            <div class="metric-box">
+                <h4>Linkage Method</h4>
+                <p>{{ result.linkage | capitalize }}</p>
+            </div>
+
+        </div>
+
+        <div class="chart-card" style="margin-bottom: 25px;">
+            <h3>
+                Hierarchical Clustering Dendrogram
+                ({{ result.linkage | capitalize }} Linkage)
+            </h3>
+
+            <p style="font-size: 14px; color: #555;
+                      margin-bottom: 15px;">
+                The dendrogram illustrates how employee groups
+                merge at different distances. The dashed line is
+                a reference merge-distance threshold.
+            </p>
+
+            <img src="{{ url_for('static',
+                                 filename=result.dendro_chart) }}"
+                 alt="SkillMatch hierarchical dendrogram">
+        </div>
+
+        <div class="chart-card" style="margin-bottom: 25px;">
+            <h3>
+                Employee Clusters in 2D PCA Space
+                (K = {{ result.n_clusters }})
+            </h3>
+
+            <img src="{{ url_for('static',
+                                 filename=result.pca_chart) }}"
+                 alt="SkillMatch hierarchical PCA clusters">
+        </div>
+
+        {% if result.cluster_summary %}
+        <div class="table-container">
+            <h2>Employee Cluster Characteristics</h2>
+
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>Cluster</th>
+                        <th>Employees</th>
+                        <th>Population %</th>
+                        <th>Mean Age</th>
+                        <th>Mean Monthly Income</th>
+                        <th>Mean Working Years</th>
+                        <th>Years at Company</th>
+                        <th>Job Satisfaction</th>
+                        <th>Overtime %</th>
+                        <th>Attrition %</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    {% for c in result.cluster_summary %}
+                    <tr>
+                        <td><strong>Cluster {{ c.cluster }}</strong></td>
+                        <td>{{ "{:,}".format(c.count) }}</td>
+                        <td>{{ c.pct }}%</td>
+                        <td>{{ c.mean_age }}</td>
+                        <td>{{ c.mean_income }}</td>
+                        <td>{{ c.mean_years_worked }}</td>
+                        <td>{{ c.mean_years_company }}</td>
+                        <td>{{ c.mean_job_satisfaction }}</td>
+                        <td>{{ c.overtime_pct }}%</td>
+                        <td>{{ c.attrition_pct }}%</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% endif %}
+
+    {% endif %}
+
+</div>
+{% endblock %}

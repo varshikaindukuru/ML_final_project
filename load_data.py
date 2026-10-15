@@ -3,7 +3,9 @@ import pandas as pd
 
 
 # Dataset Path
-DATA_PATH = r"D:\ML PPTS\Project\WA_Fn-UseC_-HR-Employee-Attrition.csv"
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+DATA_PATH = os.path.join(BASE_DIR, "WA_Fn-UseC_-HR-Employee-Attrition.csv")
 
 
 def load_data(path: str = DATA_PATH) -> pd.DataFrame:

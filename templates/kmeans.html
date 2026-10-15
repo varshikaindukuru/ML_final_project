@@ -1,0 +1,160 @@
+
+{% extends "base.html" %}
+
+{% block title %}SkillMatch - K-Means Clustering{% endblock %}
+
+{% block content %}
+<div class="container">
+
+    <h1>K-Means Employee Clustering</h1>
+    <p>
+        Grouping employees into clusters based on their work,
+        compensation, experience and satisfaction characteristics.
+    </p>
+
+    <div class="welcome-card" style="margin-bottom: 25px;">
+        <h2>Select Clustering Method and Manual K</h2>
+
+        <form method="get"
+              action="{{ url_for('kmeans_view') }}"
+              style="display: flex; gap: 20px; align-items: flex-end;
+                     flex-wrap: wrap; margin-top: 15px;">
+
+            <div>
+                <label style="font-weight: bold; display: block;
+                              margin-bottom: 6px;">
+                    Optimization Method:
+                </label>
+
+                <select name="method"
+                        style="padding: 10px 14px;
+                               border: 2px solid #08b6c9;
+                               border-radius: 8px; font-size: 15px;
+                               width: 220px;">
+                    <option value="silhouette"
+                        {% if method == 'silhouette' %}selected{% endif %}>
+                        Silhouette Analysis
+                    </option>
+
+                    <option value="elbow"
+                        {% if method == 'elbow' %}selected{% endif %}>
+                        Elbow Method (WCSS)
+                    </option>
+                </select>
+            </div>
+
+            <div>
+                <label style="font-weight: bold; display: block;
+                              margin-bottom: 6px;">
+                    Manual Clusters (K = 2 to 8):
+                </label>
+
+                <input type="number"
+                       min="2"
+                       max="8"
+                       name="manual_k"
+                       value="{{ manual_k if manual_k else '' }}"
+                       placeholder="Automatic selection"
+                       style="padding: 10px 14px;
+                              border: 2px solid #08b6c9;
+                              border-radius: 8px; font-size: 15px;
+                              width: 180px;">
+            </div>
+
+            <div>
+                <button type="submit" class="btn-cyan">
+                    Run Clustering
+                </button>
+            </div>
+        </form>
+    </div>
+
+    {% if error %}
+        <div class="error">
+            <p>{{ error }}</p>
+        </div>
+
+    {% elif result %}
+
+        <div class="metrics-grid">
+            <div class="metric-box">
+                <h4>Selected Cluster Count</h4>
+                <p>{{ result.chosen_k }}</p>
+            </div>
+
+            <div class="metric-box">
+                <h4>Best Silhouette K</h4>
+                <p>{{ result.best_k_sil }}</p>
+            </div>
+
+            <div class="metric-box">
+                <h4>Selection Method</h4>
+                <p>{{ result.method | capitalize }}</p>
+            </div>
+        </div>
+
+        <div class="chart-grid">
+            <div class="chart-card">
+                <h3>
+                    {{ result.method | capitalize }} Evaluation Curve
+                </h3>
+                <img src="{{ url_for('static',
+                                     filename=result.chart_method) }}"
+                     alt="K-Means evaluation chart">
+            </div>
+
+            <div class="chart-card">
+                <h3>
+                    Employee Clusters in 2D PCA Space
+                    (K = {{ result.chosen_k }})
+                </h3>
+                <img src="{{ url_for('static',
+                                     filename=result.cluster_chart) }}"
+                     alt="Employee K-Means PCA cluster chart">
+            </div>
+        </div>
+
+        {% if result.cluster_summary %}
+        <div class="table-container">
+            <h2>Employee Cluster Characteristics</h2>
+
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>Cluster ID</th>
+                        <th>Employees</th>
+                        <th>Population %</th>
+                        <th>Mean Age</th>
+                        <th>Mean Monthly Income</th>
+                        <th>Mean Working Years</th>
+                        <th>Mean Years at Company</th>
+                        <th>Job Satisfaction</th>
+                        <th>Overtime %</th>
+                        <th>Attrition %</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    {% for c in result.cluster_summary %}
+                    <tr>
+                        <td><strong>Cluster {{ c.cluster }}</strong></td>
+                        <td>{{ "{:,}".format(c.count) }}</td>
+                        <td>{{ c.pct }}%</td>
+                        <td>{{ c.mean_age }}</td>
+                        <td>{{ c.mean_income }}</td>
+                        <td>{{ c.mean_years_worked }}</td>
+                        <td>{{ c.mean_years_company }}</td>
+                        <td>{{ c.mean_job_satisfaction }}</td>
+                        <td>{{ c.overtime_pct }}%</td>
+                        <td>{{ c.attrition_pct }}%</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% endif %}
+
+    {% endif %}
+
+</div>
+{% endblock %}

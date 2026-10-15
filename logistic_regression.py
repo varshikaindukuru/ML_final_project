@@ -25,7 +25,7 @@ def train_logistic_model(regularization="none"):
     # GET PREPROCESSED DATA
     # ======================================================
 
-    df = get_preprocessed_data()
+    df = get_preprocessed_data(scale=False)
 
 
     # ======================================================

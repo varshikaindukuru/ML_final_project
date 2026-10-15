@@ -1,0 +1,179 @@
+
+{% extends "base.html" %}
+
+{% block title %}SkillMatch - DBSCAN Clustering{% endblock %}
+
+{% block content %}
+<div class="container">
+
+    <h1>DBSCAN Employee Clustering</h1>
+
+    <p>
+        Identify employee groups based on similarities in their
+        work, compensation, experience and satisfaction characteristics.
+        DBSCAN also identifies observations that do not belong to
+        dense clusters.
+    </p>
+
+    <div class="welcome-card" style="margin-bottom: 25px;">
+        <h2>Configure DBSCAN Parameters</h2>
+
+        <form method="get"
+              action="{{ url_for('dbscan_view') }}"
+              style="display: flex; gap: 20px; align-items: flex-end;
+                     flex-wrap: wrap; margin-top: 15px;">
+
+            <div>
+                <label for="eps"
+                       style="font-weight: bold; display: block;
+                              margin-bottom: 6px;">
+                    Epsilon (EPS):
+                </label>
+
+                <input type="number"
+                       id="eps"
+                       name="eps"
+                       min="0.01"
+                       max="20"
+                       step="0.1"
+                       value="{{ eps }}"
+                       required
+                       style="padding: 10px 14px;
+                              border: 2px solid #08b6c9;
+                              border-radius: 8px; font-size: 15px;
+                              width: 180px;">
+            </div>
+
+            <div>
+                <label for="min_samples"
+                       style="font-weight: bold; display: block;
+                              margin-bottom: 6px;">
+                    Minimum Samples:
+                </label>
+
+                <input type="number"
+                       id="min_samples"
+                       name="min_samples"
+                       min="2"
+                       max="100"
+                       value="{{ min_samples }}"
+                       required
+                       style="padding: 10px 14px;
+                              border: 2px solid #08b6c9;
+                              border-radius: 8px; font-size: 15px;
+                              width: 180px;">
+            </div>
+
+            <div>
+                <button type="submit" class="btn-cyan">
+                    Run DBSCAN
+                </button>
+            </div>
+
+        </form>
+    </div>
+
+    {% if error %}
+
+        <div class="error">
+            <p>{{ error }}</p>
+        </div>
+
+    {% elif result %}
+
+        <div class="metrics-grid">
+
+            <div class="metric-box">
+                <h4>Clusters Formed</h4>
+                <p>{{ result.n_clusters }}</p>
+            </div>
+
+            <div class="metric-box">
+                <h4>Noise / Outliers</h4>
+                <p>{{ result.n_noise }}</p>
+            </div>
+
+            <div class="metric-box">
+                <h4>Noise Percentage</h4>
+                <p>{{ result.noise_pct }}%</p>
+            </div>
+
+            <div class="metric-box">
+                <h4>Total Employees Analyzed</h4>
+                <p>{{ result.total_samples }}</p>
+            </div>
+
+            <div class="metric-box">
+                <h4>Epsilon (EPS)</h4>
+                <p>{{ result.eps }}</p>
+            </div>
+
+            <div class="metric-box">
+                <h4>Minimum Samples</h4>
+                <p>{{ result.min_samples }}</p>
+            </div>
+
+        </div>
+
+        <div class="chart-card" style="margin-bottom: 25px;">
+            <h3>Employee Clusters in 2D PCA Space</h3>
+
+            <img src="{{ url_for('static',
+                                 filename=result.chart_path) }}"
+                 alt="DBSCAN employee clustering PCA chart">
+        </div>
+
+        {% if result.clusters_summary %}
+
+        <div class="table-container">
+            <h2>Employee Cluster Characteristics</h2>
+
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>Cluster</th>
+                        <th>Employees</th>
+                        <th>Population %</th>
+                        <th>Mean Age</th>
+                        <th>Mean Monthly Income</th>
+                        <th>Years at Company</th>
+                        <th>Job Satisfaction</th>
+                        <th>Overtime %</th>
+                        <th>Attrition %</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    {% for c in result.clusters_summary %}
+                    <tr>
+                        <td><strong>{{ c.name }}</strong></td>
+                        <td>{{ "{:,}".format(c.count) }}</td>
+                        <td>{{ c.pct }}%</td>
+                        <td>{{ c.mean_age }}</td>
+                        <td>{{ c.mean_income }}</td>
+                        <td>{{ c.mean_years_company }}</td>
+                        <td>{{ c.mean_job_satisfaction }}</td>
+                        <td>{{ c.overtime_pct }}%</td>
+                        <td>{{ c.attrition_pct }}%</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+        {% endif %}
+
+        <div class="welcome-card" style="margin-top: 25px;">
+            <h3>Understanding DBSCAN Results</h3>
+            <p>
+                DBSCAN groups observations in dense regions. The EPS
+                parameter controls the neighborhood distance, while
+                Minimum Samples determines the density needed to form
+                a cluster. Noise observations are labeled as -1.
+            </p>
+        </div>
+
+    {% endif %}
+
+</div>
+{% endblock %}

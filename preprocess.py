@@ -15,7 +15,7 @@ DATASET_PATH = os.path.join(
 # RUN PREPROCESSING
 # ==========================================================
 
-def run_preprocessing():
+def run_preprocessing(scale=True):
 
     # ==========================================================
     # 1. LOAD DATASET
@@ -94,13 +94,12 @@ def run_preprocessing():
     # ==========================================================
 
     numerical_columns = df.select_dtypes(
-        include=["int64", "float64"]
+        include=["number"]
     ).columns.tolist()
 
     categorical_columns = df.select_dtypes(
-        include=["object", "category", "bool"]
+        exclude=["number"]
     ).columns.tolist()
-
 
     # Attrition is the classification target
     # Therefore, do not include it in one-hot encoding
@@ -239,9 +238,8 @@ def run_preprocessing():
     # ==========================================================
 
     final_numerical_columns = df.select_dtypes(
-        include=["int64", "float64"]
+        include=["number"]
     ).columns.tolist()
-
 
     # Do NOT scale target columns
 
@@ -258,7 +256,7 @@ def run_preprocessing():
     ]
 
 
-    if len(scaling_columns) > 0:
+    if scale and len(scaling_columns) > 0:
 
         scaler = StandardScaler()
 
@@ -462,8 +460,8 @@ def run_preprocessing():
 # GET PREPROCESSED DATA
 # ==========================================================
 
-def get_preprocessed_data():
+def get_preprocessed_data(scale=True):
 
-    results = run_preprocessing()
+    results = run_preprocessing(scale=scale)
 
     return results["data"]

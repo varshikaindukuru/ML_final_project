@@ -14,6 +14,8 @@ from sklearn.metrics import (
     r2_score
 )
 
+from sklearn.preprocessing import StandardScaler
+
 from preprocess import get_preprocessed_data
 
 
@@ -29,7 +31,7 @@ def train_model(
     # GET PREPROCESSED DATA
     # ==========================================================
 
-    df = get_preprocessed_data()
+    df = get_preprocessed_data(scale=False)
 
 
     # ==========================================================
@@ -79,6 +81,16 @@ def train_model(
         random_state=42
 
     )
+
+    # ==========================================================
+    # STANDARD SCALING (fit on training data only)
+    # ==========================================================
+
+    scaler = StandardScaler()
+
+    X_train = scaler.fit_transform(X_train)
+
+    X_test = scaler.transform(X_test)
 
 
     # ==========================================================
